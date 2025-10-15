@@ -61,6 +61,7 @@ export const HomePage = () => {
               onClick={() =>
                 setSearchParams((prev) => {
                   prev.set('tab', 'favorites');
+                  prev.delete('page');
                   return prev;
                 })
               }
