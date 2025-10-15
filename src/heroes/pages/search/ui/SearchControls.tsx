@@ -9,12 +9,35 @@ import {
   AccordionContent,
   AccordionItem,
 } from '@/components/ui/accordion';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
-export const SearchControls = () => {
+interface Props {
+  teams: string[];
+  categories: string[];
+  universes: string[];
+  statuses: string[];
+}
+
+export const SearchControls = ({
+  teams,
+  categories,
+  universes,
+  statuses,
+}: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
   const activeAccordion = searchParams.get('active-accordion') ?? '';
   const selectedStrength = Number(searchParams.get('strength') ?? '0');
+  const selectedTeam = searchParams.get('team') ?? 'all';
+  const selectedCategory = searchParams.get('category') ?? 'all';
+  const selectedUniverse = searchParams.get('universe') ?? 'all';
+  const selectedStatus = searchParams.get('status') ?? 'all';
 
   const setQueryParams = (name: string, value: string) => {
     setSearchParams((prev) => {
@@ -96,43 +119,86 @@ export const SearchControls = () => {
               </div>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
                 <div className='space-y-2'>
-                  <label className='text-sm font-medium'>Team</label>
-                  <div className='h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm'>
-                    All teams
-                  </div>
+                  <label className='text-sm font-medium'>Equipos</label>
+                  <Select
+                    defaultValue={selectedTeam}
+                    onValueChange={(value) => setQueryParams('team', value)}
+                  >
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder='Todos los equipos' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='all'>-</SelectItem>
+                      {teams.map((team) => (
+                        <SelectItem key={team} value={team}>
+                          {team}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className='space-y-2'>
                   <label className='text-sm font-medium'>Category</label>
-                  <div className='h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm'>
-                    All categories
-                  </div>
+                  <Select
+                    defaultValue={selectedCategory}
+                    onValueChange={(value) => setQueryParams('category', value)}
+                  >
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder='Todas las categorías' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='all'>-</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className='space-y-2'>
                   <label className='text-sm font-medium'>Universe</label>
-                  <div className='h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm'>
-                    All universes
-                  </div>
+                  <Select
+                    defaultValue={selectedUniverse}
+                    onValueChange={(value) => setQueryParams('universe', value)}
+                  >
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder='Todos los universos' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='all'>-</SelectItem>
+                      {universes.map((universe) => (
+                        <SelectItem key={universe} value={universe}>
+                          {universe}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className='space-y-2'>
                   <label className='text-sm font-medium'>Status</label>
-                  <div className='h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm'>
-                    All statuses
-                  </div>
+                  <Select
+                    defaultValue={selectedStatus}
+                    onValueChange={(value) => setQueryParams('status', value)}
+                  >
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder='Todos los estados' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value='all'>-</SelectItem>
+                      {statuses.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <div className='mt-4'>
                 <label className='text-sm font-medium'>
                   Minimum Strength: {selectedStrength}/10
                 </label>
-                {/* <div className='relative flex w-full touch-none select-none items-center mt-2'>
-            <div className='relative h-2 w-full grow overflow-hidden rounded-full bg-secondary'>
-              <div
-                className='absolute h-full bg-primary'
-                style={{ width: '0%' }}
-              />
-            </div>
-            <div className='block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors' />
-          </div> */}
                 <Slider
                   defaultValue={[selectedStrength]}
                   onValueChange={(value) =>
