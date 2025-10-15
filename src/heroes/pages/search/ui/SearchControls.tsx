@@ -39,9 +39,20 @@ export const SearchControls = ({
   const selectedUniverse = searchParams.get('universe') ?? 'all';
   const selectedStatus = searchParams.get('status') ?? 'all';
 
+  // const setQueryParams = (name: string, value: string) => {
+  //   setSearchParams((prev) => {
+  //     prev.set(name, value);
+  //     return prev;
+  //   });
+  // };
+
   const setQueryParams = (name: string, value: string) => {
     setSearchParams((prev) => {
-      prev.set(name, value);
+      if (value === 'all') {
+        prev.delete(name);
+      } else {
+        prev.set(name, value);
+      }
       return prev;
     });
   };
